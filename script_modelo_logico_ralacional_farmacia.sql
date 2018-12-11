@@ -3,9 +3,9 @@
 -- Model: New Model    Version: 1.0
 -- MySQL Workbench Forward Engineering
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+--SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+--SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+--SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema mydb
@@ -14,162 +14,156 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS mydb;
+--USE `mydb` ;
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Laboratorio`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Laboratorio` (
-  `codigoLab` INT NOT NULL,
-  `direccion` VARCHAR(45) NULL,
-  `tlf` INT NULL,
-  `nombre` VARCHAR(45) NULL,
-  `fax` INT NULL,
-  PRIMARY KEY (`codigoLab`))
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS mydb.Laboratorio (
+  codigoLab INT NOT NULL,
+  direccion VARCHAR(45) NULL,
+  tlf INT NULL,
+  nombre VARCHAR(45) NULL,
+  fax INT NULL,
+  PRIMARY KEY (codigoLab));
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`medicamentos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`medicamentos` (
-  `codigo` INT NOT NULL,
-  `nombreM` VARCHAR(45) NOT NULL,
-  `unidades_en_stock` INT NULL,
-  `unidades_vendidas` INT NULL,
-  `precio` INT NULL,
-  `tipo` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`codigo`))
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS mydb.medicamentos (
+  codigo INT NOT NULL,
+  nombreM VARCHAR(45) NOT NULL,
+  unidades_en_stock INT NULL,
+  unidades_vendidas INT NULL,
+  precio INT NULL,
+  tipo VARCHAR(45) NOT NULL,
+  PRIMARY KEY (codigo));
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Laboratorio_medicamentos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Laboratorio_medicamentos` (
-  `codigo_lab` INT NOT NULL,
-  `codigo` INT NOT NULL,
-  PRIMARY KEY (`codigo_lab`, `codigo`),
-  INDEX `codigo_idx` (`codigo` ASC) VISIBLE,
-  CONSTRAINT `codigo_lab`
-    FOREIGN KEY (`codigo_lab`)
-    REFERENCES `mydb`.`Laboratorio` (`codigoLab`)
+CREATE TABLE IF NOT EXISTS mydb.Laboratorio_medicamentos (
+  codigo_lab INT NOT NULL,
+  codigo INT NOT NULL,
+  PRIMARY KEY (codigo_lab, codigo),
+  CONSTRAINT codigo_lab
+    FOREIGN KEY (codigo_lab)
+    REFERENCES mydb.Laboratorio (codigoLab)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `codigo`
-    FOREIGN KEY (`codigo`)
-    REFERENCES `mydb`.`medicamentos` (`codigo`)
+  CONSTRAINT codigo
+    FOREIGN KEY (codigo)
+    REFERENCES mydb.medicamentos (codigo)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
+
+CREATE INDEX codigo_idx ON mydb.Laboratorio_medicamentos (codigo ASC) VISIBLE;
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Familia`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Familia` (
-  `tipo_enfermedad` VARCHAR(45) NOT NULL,
-  `nombref` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`tipo_enfermedad`))
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS mydb.Familia (
+  tipo_enfermedad VARCHAR(45) NOT NULL,
+  nombref VARCHAR(45) NOT NULL,
+  PRIMARY KEY (tipo_enfermedad));
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Familia_medicamentos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Familia_medicamentos` (
-  `tipo_enfermedad` VARCHAR(45) NOT NULL,
-  `codigo` INT NULL,
-  PRIMARY KEY (`tipo_enfermedad`),
-  INDEX `codigo_idx` (`codigo` ASC) VISIBLE,
-  CONSTRAINT `tipo_enfermedad`
-    FOREIGN KEY (`tipo_enfermedad`)
-    REFERENCES `mydb`.`Familia` (`tipo_enfermedad`)
+CREATE TABLE IF NOT EXISTS mydb.Familia_medicamentos (
+  tipo_enfermedad VARCHAR(45) NOT NULL,
+  codigo INT NULL,
+  PRIMARY KEY (tipo_enfermedad),
+  CONSTRAINT tipo_enfermedad
+    FOREIGN KEY (tipo_enfermedad)
+    REFERENCES mydb.Familia (tipo_enfermedad)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `codigo`
-    FOREIGN KEY (`codigo`)
-    REFERENCES `mydb`.`medicamentos` (`codigo`)
+  CONSTRAINT codigo
+    FOREIGN KEY (codigo)
+    REFERENCES mydb.medicamentos (codigo)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
+
+CREATE INDEX codigo_idx ON mydb.Familia_medicamentos (codigo ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`cliente` (
-  `DNI` INT NOT NULL,
-  `nombre` VARCHAR(45) NOT NULL,
-  `datos_bancarios` VARCHAR(45) NOT NULL,
-  `fecha_pago` DATE NOT NULL,
-  PRIMARY KEY (`DNI`))
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS mydb.cliente (
+  DNI INT NOT NULL,
+  nombre VARCHAR(45) NOT NULL,
+  datos_bancarios VARCHAR(45) NOT NULL,
+  fecha_pago DATE NOT NULL,
+  PRIMARY KEY (DNI));
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`compra`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`compra` (
-  `DNI` INT NOT NULL,
-  `codigo` INT NOT NULL,
-  `fecha_compra` DATE NOT NULL,
-  PRIMARY KEY (`DNI`),
-  INDEX `codigo_idx` (`codigo` ASC) VISIBLE,
-  CONSTRAINT `codigo`
-    FOREIGN KEY (`codigo`)
-    REFERENCES `mydb`.`medicamentos` (`codigo`)
+CREATE TABLE IF NOT EXISTS mydb.compra (
+  DNI INT NOT NULL,
+  codigo INT NOT NULL,
+  fecha_compra DATE NOT NULL,
+  PRIMARY KEY (DNI),
+  CONSTRAINT codigo
+    FOREIGN KEY (codigo)
+    REFERENCES mydb.medicamentos (codigo)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `DNI`
-    FOREIGN KEY (`DNI`)
-    REFERENCES `mydb`.`cliente` (`DNI`)
+  CONSTRAINT DNI
+    FOREIGN KEY (DNI)
+    REFERENCES mydb.cliente (DNI)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
+
+CREATE INDEX codigo_idx ON mydb.compra (codigo ASC) VISIBLE;
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Receta`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Receta` (
-  `codigo` INT NOT NULL,
-  `nombre` VARCHAR(45) NULL,
-  PRIMARY KEY (`codigo`),
-  CONSTRAINT `codigo`
-    FOREIGN KEY (`codigo`)
-    REFERENCES `mydb`.`medicamentos` (`codigo`)
+CREATE TABLE IF NOT EXISTS mydb.Receta (
+  codigo INT NOT NULL,
+  nombre VARCHAR(45) NULL,
+  PRIMARY KEY (codigo),
+  CONSTRAINT codigo
+    FOREIGN KEY (codigo)
+    REFERENCES mydb.medicamentos (codigo)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`ventaL`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`ventaL` (
-  `codigo` INT NOT NULL,
-  `nombre` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`codigo`),
-  CONSTRAINT `codigo`
-    FOREIGN KEY (`codigo`)
-    REFERENCES `mydb`.`medicamentos` (`codigo`)
+CREATE TABLE IF NOT EXISTS mydb.ventaL (
+  codigo INT NOT NULL,
+  nombre VARCHAR(45) NOT NULL,
+  PRIMARY KEY (codigo),
+  CONSTRAINT codigo
+    FOREIGN KEY (codigo)
+    REFERENCES mydb.medicamentos (codigo)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+--SET SQL_MODE=@OLD_SQL_MODE;
+--SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+--SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
 -- Data for table `mydb`.`Laboratorio`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`Laboratorio` (`codigoLab`, `direccion`, `tlf`, `nombre`, `fax`) VALUES (1234, 'laguna', 123456789, 'principal', NULL);
+--USE `mydb`;
+INSERT INTO mydb.Laboratorio (codigoLab, direccion, tlf, nombre, fax) VALUES (1234, 'laguna', 123456789, 'principal', NULL);
 
 COMMIT;
 
@@ -178,9 +172,9 @@ COMMIT;
 -- Data for table `mydb`.`medicamentos`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`medicamentos` (`codigo`, `nombreM`, `unidades_en_stock`, `unidades_vendidas`, `precio`, `tipo`) VALUES (123, 'paracetamol', 5, 9, 10, 'ventaL');
-INSERT INTO `mydb`.`medicamentos` (`codigo`, `nombreM`, `unidades_en_stock`, `unidades_vendidas`, `precio`, `tipo`) VALUES (234, 'aspirina', 3, 5, 4, 'Receta');
+--USE `mydb`;
+INSERT INTO mydb.medicamentos (codigo, nombreM, unidades_en_stock, unidades_vendidas, precio, tipo) VALUES (123, 'paracetamol', 5, 9, 10, 'ventaL');
+INSERT INTO mydb.medicamentos (codigo, nombreM, unidades_en_stock, unidades_vendidas, precio, tipo) VALUES (234, 'aspirina', 3, 5, 4, 'Receta');
 
 COMMIT;
 
@@ -189,8 +183,8 @@ COMMIT;
 -- Data for table `mydb`.`Laboratorio_medicamentos`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`Laboratorio_medicamentos` (`codigo_lab`, `codigo`) VALUES (1234, 123);
+--USE `mydb`;
+INSERT INTO mydb.Laboratorio_medicamentos (codigo_lab, codigo) VALUES (1234, 123);
 
 COMMIT;
 
@@ -199,8 +193,8 @@ COMMIT;
 -- Data for table `mydb`.`Familia`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`Familia` (`tipo_enfermedad`, `nombref`) VALUES ('muscular', 'dolor_muscular');
+--USE `mydb`;
+INSERT INTO mydb.Familia (tipo_enfermedad, nombref) VALUES ('muscular', 'dolor_muscular');
 
 COMMIT;
 
@@ -209,8 +203,8 @@ COMMIT;
 -- Data for table `mydb`.`Familia_medicamentos`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`Familia_medicamentos` (`tipo_enfermedad`, `codigo`) VALUES ('muscular', 123);
+--USE `mydb`;
+INSERT INTO mydb.Familia_medicamentos (tipo_enfermedad, codigo) VALUES ('muscular', 123);
 
 COMMIT;
 
@@ -219,8 +213,8 @@ COMMIT;
 -- Data for table `mydb`.`cliente`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`cliente` (`DNI`, `nombre`, `datos_bancarios`, `fecha_pago`) VALUES (4444, 'jose', DEFAULT, '12/12/12');
+--USE `mydb`;
+INSERT INTO mydb.cliente (DNI, nombre, datos_bancarios, fecha_pago) VALUES (4444, 'jose', DEFAULT, '12/12/12');
 
 COMMIT;
 
@@ -229,8 +223,8 @@ COMMIT;
 -- Data for table `mydb`.`compra`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`compra` (`DNI`, `codigo`, `fecha_compra`) VALUES (444, 123, '11/11/11');
+--USE `mydb`;
+INSERT INTO mydb.compra (DNI, codigo, fecha_compra) VALUES (444, 123, '11/11/11');
 
 COMMIT;
 
@@ -239,8 +233,8 @@ COMMIT;
 -- Data for table `mydb`.`Receta`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`Receta` (`codigo`, `nombre`) VALUES (234, 'aspirina');
+--USE `mydb`;
+INSERT INTO mydb.Receta (codigo, nombre) VALUES (234, 'aspirina');
 
 COMMIT;
 
@@ -249,8 +243,8 @@ COMMIT;
 -- Data for table `mydb`.`ventaL`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
-INSERT INTO `mydb`.`ventaL` (`codigo`, `nombre`) VALUES (123, 'paracetamol');
+--USE `mydb`;
+INSERT INTO mydb.ventaL (codigo, nombre) VALUES (123, 'paracetamol');
 
 COMMIT;
 
