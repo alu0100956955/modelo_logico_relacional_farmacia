@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS mydb.Laboratorio_medicamentos (
     ON UPDATE NO ACTION);
 
 
-CREATE INDEX codigo_idx ON mydb.Laboratorio_medicamentos (codigo ASC) VISIBLE;
+CREATE INDEX codigo_idl ON mydb.Laboratorio_medicamentos (codigo ASC);
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Familia`
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS mydb.Familia_medicamentos (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-CREATE INDEX codigo_idx ON mydb.Familia_medicamentos (codigo ASC) VISIBLE;
+CREATE INDEX codigo_idf ON mydb.Familia_medicamentos (codigo ASC);
 
 
 -- -----------------------------------------------------
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS mydb.compra (
     ON UPDATE NO ACTION);
 
 
-CREATE INDEX codigo_idx ON mydb.compra (codigo ASC) VISIBLE;
+CREATE INDEX codigo_idc ON mydb.compra (codigo ASC);
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Receta`
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS mydb.ventaL (
 -- Data for table `mydb`.`Laboratorio`
 -- -----------------------------------------------------
 START TRANSACTION;
---USE `mydb`;
+
 INSERT INTO mydb.Laboratorio (codigoLab, direccion, tlf, nombre, fax) VALUES (1234, 'laguna', 123456789, 'principal', NULL);
 
 COMMIT;
@@ -214,7 +214,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 --USE `mydb`;
-INSERT INTO mydb.cliente (DNI, nombre, datos_bancarios, fecha_pago) VALUES (4444, 'jose', DEFAULT, '12/12/12');
+INSERT INTO mydb.cliente (DNI, nombre, datos_bancarios, fecha_pago) VALUES (4444, 'jose', 'cajasiete', '12/12/12');
 
 COMMIT;
 
@@ -224,7 +224,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 --USE `mydb`;
-INSERT INTO mydb.compra (DNI, codigo, fecha_compra) VALUES (444, 123, '11/11/11');
+INSERT INTO mydb.compra (DNI, codigo, fecha_compra) VALUES (4444, 123, '11/11/11');
 
 COMMIT;
 
